@@ -1,12 +1,21 @@
-import MaterialIcon from "./MaterialIcon";
-import { DRAWER_NAV_LINKS } from "../constants";
+import { Link } from "react-router";
+import MaterialIcon from "@/components/MaterialIcon";
+import {
+  DRAWER_NAV_LINKS,
+  isNavLinkActive,
+} from "@/layouts/constants/navigation";
 
 interface MobileDrawerProps {
   open: boolean;
   onClose: () => void;
+  pathname: string;
 }
 
-export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
+export default function MobileDrawer({
+  open,
+  onClose,
+  pathname,
+}: MobileDrawerProps) {
   return (
     <div
       className={`fixed inset-0 z-[60] md:hidden transition-transform duration-300 ease-in-out ${
@@ -35,21 +44,24 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
           </button>
         </div>
         <nav className="flex flex-col p-4 gap-4">
-          {DRAWER_NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={onClose}
-              className={
-                link.active
-                  ? "text-primary font-bold border-b-2 border-primary pb-2 flex items-center gap-2"
-                  : "text-on-surface-variant hover:text-primary p-2 transition-colors flex items-center gap-2"
-              }
-            >
-              <MaterialIcon name={link.icon} />
-              {link.label}
-            </a>
-          ))}
+          {DRAWER_NAV_LINKS.map((link) => {
+            const active = isNavLinkActive(pathname, link.to);
+            return (
+              <Link
+                key={link.label}
+                to={link.to}
+                onClick={onClose}
+                className={
+                  active
+                    ? "text-primary font-bold border-b-2 border-primary pb-2 flex items-center gap-2"
+                    : "text-on-surface-variant hover:text-primary p-2 transition-colors flex items-center gap-2"
+                }
+              >
+                <MaterialIcon name={link.icon} />
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
       </div>
     </div>

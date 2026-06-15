@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import MaterialIcon from "./MaterialIcon";
-import MobileDrawer from "./MobileDrawer";
-import { NAV_LINKS } from "../constants";
+import { Link, useLocation } from "react-router";
+import MaterialIcon from "@/components/MaterialIcon";
+import MobileDrawer from "@/layouts/components/MobileDrawer";
+import { isNavLinkActive, NAV_LINKS } from "@/layouts/constants/navigation";
 
-export default function Navbar() {
+export default function Header() {
+  const { pathname } = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -34,9 +36,12 @@ export default function Navbar() {
           >
             <MaterialIcon name="menu" />
           </button>
-          <h1 className="font-headline text-headline-md font-bold text-primary">
+          <Link
+            to="/"
+            className="font-headline text-headline-md font-bold text-primary"
+          >
             Song Nguyễn
-          </h1>
+          </Link>
           <div className="flex gap-4">
             <button
               type="button"
@@ -57,28 +62,34 @@ export default function Navbar() {
       </header>
 
       <nav className={`hidden md:block ${navClassName}`}>
-        <div className="flex justify-between items-center px-margin-desktop py-4 max-w-7xl mx-auto">
-          <div className="font-headline text-headline-md font-bold text-primary dark:text-primary-fixed">
+        <div className="flex justify-between items-center h-20 px-margin-desktop max-w-[1280px] mx-auto">
+          <Link
+            to="/"
+            className="font-headline text-headline-md font-bold text-primary dark:text-primary-fixed"
+          >
             Song Nguyễn
+          </Link>
+
+          <div className="flex items-center gap-lg">
+            {NAV_LINKS.map((link) => {
+              const active = isNavLinkActive(pathname, link.to);
+              return (
+                <Link
+                  key={link.label}
+                  to={link.to}
+                  className={
+                    active
+                      ? "text-primary font-bold border-b-2 border-primary pb-1 text-body-md cursor-pointer active:scale-95 transition-transform"
+                      : "text-on-surface-variant hover:text-primary transition-colors text-body-md cursor-pointer active:scale-95 transition-transform"
+                  }
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-md">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className={
-                  link.active
-                    ? "text-primary font-bold border-b-2 border-primary pb-1 text-body-md cursor-pointer active:scale-95 transition-transform"
-                    : "text-on-surface-variant hover:text-primary transition-colors text-body-md cursor-pointer active:scale-95 transition-transform"
-                }
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-sm">
             <button
               type="button"
               aria-label="Giỏ hàng"
@@ -97,7 +108,11 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <MobileDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        pathname={pathname}
+      />
     </>
   );
 }

@@ -1,5 +1,5 @@
 import Button from "./Button";
-import MaterialIcon from "./MaterialIcon";
+import MaterialIcon from "@/components/MaterialIcon";
 import { IMAGES } from "../constants";
 
 export default function HeroSection() {

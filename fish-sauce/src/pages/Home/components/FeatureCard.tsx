@@ -1,4 +1,4 @@
-import MaterialIcon from "./MaterialIcon";
+import MaterialIcon from "@/components/MaterialIcon";
 
 interface FeatureCardProps {
   icon: string;

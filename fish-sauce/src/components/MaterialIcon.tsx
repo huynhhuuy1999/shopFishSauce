@@ -12,9 +12,7 @@ export default function MaterialIcon({
   return (
     <span
       className={`material-symbols-outlined ${className}`}
-      style={
-        fill ? { fontVariationSettings: "'FILL' 1" } : undefined
-      }
+      style={fill ? { fontVariationSettings: "'FILL' 1" } : undefined}
     >
       {name}
     </span>

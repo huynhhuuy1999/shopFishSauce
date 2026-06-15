@@ -12,29 +12,6 @@ export const IMAGES = {
     "@/assets/images/nuoc-mam.jpg",
 } as const;
 
-export const NAV_LINKS: Array<{
-  label: string;
-  href: string;
-  active?: boolean;
-}> = [
-  { label: "Trang chủ", href: "#", active: true },
-  { label: "Sản phẩm", href: "#products" },
-  { label: "Về chúng tôi", href: "#about" },
-  { label: "Liên hệ", href: "#contact" },
-];
-
-export const DRAWER_NAV_LINKS: Array<{
-  label: string;
-  href: string;
-  icon: string;
-  active?: boolean;
-}> = [
-  { label: "Trang chủ", href: "#", icon: "home", active: true },
-  { label: "Sản phẩm", href: "#products", icon: "set_meal" },
-  { label: "Về chúng tôi", href: "#contact", icon: "history_edu" },
-  { label: "Liên hệ", href: "#contact", icon: "contact_support" },
-];
-
 export const FEATURES = [
   {
     icon: "nature",

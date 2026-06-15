@@ -1,4 +1,4 @@
-import MaterialIcon from "./MaterialIcon";
+import MaterialIcon from "@/components/MaterialIcon";
 import { MOBILE_COMMITMENTS } from "../constants";
 
 export default function CommitmentsSection() {
