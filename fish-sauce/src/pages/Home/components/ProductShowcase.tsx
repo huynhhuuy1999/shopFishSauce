@@ -9,7 +9,7 @@ export default function ProductShowcase() {
       <div className="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop">
         <div className="flex flex-col md:flex-row items-center gap-xl">
           <div className="flex-1">
-            <div className="w-full h-[600px] md:h-[500px] sm:h-[400px] bg-[#b5c7ce]">
+            <div className="w-full h-150 md:h-125 sm:h-100 bg-[#b5c7ce] rounded-md">
               <img
                 alt="Chai nước mắm Song Nguyễn cao cấp"
                 // className="w-full mx-auto drop-shadow-2xl"

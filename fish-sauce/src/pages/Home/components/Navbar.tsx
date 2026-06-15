@@ -82,14 +82,14 @@ export default function Navbar() {
             <button
               type="button"
               aria-label="Giỏ hàng"
-              className="text-primary hover:text-primary-container transition-all cursor-pointer active:scale-95"
+              className="text-primary hover:text-primary-container transition-all cursor-pointer active:scale-95 flex items-center"
             >
               <MaterialIcon name="shopping_cart" />
             </button>
             <button
               type="button"
               aria-label="Tài khoản"
-              className="text-primary hover:text-primary-container transition-all cursor-pointer active:scale-95"
+              className="text-primary hover:text-primary-container transition-all cursor-pointer active:scale-95 flex items-center"
             >
               <MaterialIcon name="account_circle" />
             </button>

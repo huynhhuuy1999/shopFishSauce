@@ -137,9 +137,6 @@ export default function Footer() {
             <p className="text-label-md text-on-surface-variant">
               © 2024 Song Nguyễn. Tinh hoa nước mắm truyền thống.
             </p>
-            <span className="text-label-sm text-on-surface-variant/60">
-              Designed with Pride
-            </span>
           </div>
         </div>
       </div>

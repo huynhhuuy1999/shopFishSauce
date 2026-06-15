@@ -27,6 +27,7 @@ export default function HeroSection() {
           </span>
         </div>
         <h2 className="font-headline text-headline-lg-mobile mb-4">
+          Nước Mắm Song Nguyễn <br />
           Tinh Hoa Nước Mắm Phan Rang
         </h2>
         <p className="text-body-md mb-8 opacity-90">
