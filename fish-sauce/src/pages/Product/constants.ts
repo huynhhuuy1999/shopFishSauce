@@ -1,7 +1,8 @@
+// import { NumberDataType } from './../../../../fish-sauce-be/node_modules/sequelize/types/data-types.d';
 export type ProductBadgeVariant = "premium" | "organic" | "gift";
 
 export interface Product {
-  id: string;
+  id: number;
   name: string;
   description: string;
   descriptionMobile: string;
@@ -17,7 +18,7 @@ export interface Product {
 
 export const PRODUCTS: Product[] = [
   {
-    id: "cot-nhat",
+    id: 1,
     name: "Nước Mắm Cốt Nhất",
     description:
       "Nước mắm nhĩ thượng hạng từ 100% cá cơm than, độ đạm cao tự nhiên, vị ngọt hậu sâu sắc.",
@@ -31,7 +32,7 @@ export const PRODUCTS: Product[] = [
     tags: ["40° Đạm", "500ml"],
   },
   {
-    id: "an-dam",
+    id: 2,
     name: "Nước Mắm Ăn Dặm",
     description:
       "Công thức giảm mặn đặc biệt, bổ sung dinh dưỡng, hoàn hảo cho giai đoạn phát triển của trẻ nhỏ.",
@@ -45,7 +46,7 @@ export const PRODUCTS: Product[] = [
     tags: ["35° Đạm", "250ml"],
   },
   {
-    id: "hai-dang",
+    id: 3,
     name: "Bộ Quà Tặng Hải Đăng",
     description:
       "Thiết kế sang trọng, hội tụ những dòng nước mắm trứ danh, món quà ý nghĩa cho đối tác và người thân.",

@@ -3,18 +3,24 @@ import sequelize from "../config/database";
 
 export interface HoaDonAttributes {
   id: number;
-  customerName: string | null;
-  phone: string | null;
-  address: string | null;
+  customerName: string;
+  phone: string;
+  address: string;
   status: number | null;
   sumPrice: number;
-  quantity: number | null;
-  typeSauceId: number | null;
+  quantity: number;
+  typeSauceId: number;
 }
 
 export type HoaDonCreationAttributes = Optional<
   HoaDonAttributes,
-  "id" | "customerName" | "phone" | "address" | "status" | "quantity" | "typeSauceId"
+  | "id"
+  | "customerName"
+  | "phone"
+  | "address"
+  | "status"
+  | "quantity"
+  | "typeSauceId"
 >;
 
 class HoaDon
@@ -22,13 +28,13 @@ class HoaDon
   implements HoaDonAttributes
 {
   declare id: number;
-  declare customerName: string | null;
-  declare phone: string | null;
-  declare address: string | null;
+  declare customerName: string;
+  declare phone: string;
+  declare address: string;
   declare status: number | null;
   declare sumPrice: number;
-  declare quantity: number | null;
-  declare typeSauceId: number | null;
+  declare quantity: number;
+  declare typeSauceId: number;
 }
 
 HoaDon.init(
@@ -40,15 +46,15 @@ HoaDon.init(
     },
     customerName: {
       type: DataTypes.STRING(100),
-      allowNull: true,
+      allowNull: false,
     },
     phone: {
       type: DataTypes.STRING(20),
-      allowNull: true,
+      allowNull: false,
     },
     address: {
       type: DataTypes.STRING(200),
-      allowNull: true,
+      allowNull: false,
     },
     status: {
       type: DataTypes.INTEGER,
@@ -60,18 +66,18 @@ HoaDon.init(
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     typeSauceId: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
   },
   {
     sequelize,
     tableName: "HoaDon",
     timestamps: false,
-  }
+  },
 );
 
 export default HoaDon;

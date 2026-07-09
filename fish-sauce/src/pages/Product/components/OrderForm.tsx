@@ -1,20 +1,42 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import MaterialIcon from "@/components/MaterialIcon";
-import { PRODUCTS } from "../constants";
+// import { PRODUCTS } from "../constants";
+import { createHoaDon } from "@/services/order.service";
+import type { TypeSauceResponse } from "@/models/typeSauce";
 
 type SubmitState = "idle" | "loading" | "success";
 
 interface OrderFormProps {
-  selectedProduct: string;
-  onProductChange: (product: string) => void;
+  selectedProduct?: number;
+  onProductChange: (product: number) => void;
+  listTypeSauce?: TypeSauceResponse[];
+}
+
+interface IOrderForm {
+  customerName: string;
+  phone: string;
+  address: string;
+  status: number;
+  sumPrice: number;
+  quantity: number;
+  typeSauceId?: number;
 }
 
 export default function OrderForm({
   selectedProduct,
   onProductChange,
+  listTypeSauce,
 }: OrderFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const [orderFormData, setOrderFormData] = useState<IOrderForm>({
+    customerName: "",
+    phone: "",
+    address: "",
+    status: 1,
+    sumPrice: 0,
+    quantity: 1,
+  });
 
   useEffect(() => {
     if (selectedProduct) {
@@ -30,12 +52,13 @@ export default function OrderForm({
     if (submitState !== "idle") return;
 
     setSubmitState("loading");
-    setTimeout(() => {
+    setTimeout(async () => {
       setSubmitState("success");
+      await createHoaDon(orderFormData);
       setTimeout(() => {
         setSubmitState("idle");
         formRef.current?.reset();
-        onProductChange("");
+        // onProductChange(0);
       }, 3000);
     }, 1500);
   };
@@ -73,13 +96,29 @@ export default function OrderForm({
             <select
               id="product-select"
               value={selectedProduct}
-              onChange={(event) => onProductChange(event.target.value)}
+              onChange={(event) => {
+                onProductChange(Number(event.target.value));
+                setOrderFormData((prev) => ({
+                  ...prev,
+                  typeSauceId: Number(event.target.value),
+                  sumPrice:
+                    listTypeSauce?.find(
+                      (product) => product.id === Number(event.target.value),
+                    )?.price || 0 * prev.quantity,
+                }));
+                console.log("selectedProduct", event.target.value);
+              }}
               className="w-full h-14 md:h-auto bg-white md:bg-surface-bright border border-outline md:border-outline-variant rounded-lg px-4 md:p-md font-body-md appearance-none focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
             >
               <option value="">Chọn sản phẩm</option>
-              {PRODUCTS.map((product) => (
+              {/* {PRODUCTS.map((product) => (
                 <option key={product.id} value={product.name}>
                   {product.name}
+                </option>
+              ))} */}
+              {listTypeSauce?.map((product) => (
+                <option key={product.id} value={product.id}>
+                  {product.description}
                 </option>
               ))}
             </select>
@@ -103,6 +142,13 @@ export default function OrderForm({
               type="text"
               placeholder="Nguyễn Văn A"
               className="w-full h-14 md:h-auto bg-white md:bg-surface-bright border border-outline md:border-outline-variant rounded-lg px-4 md:p-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              value={orderFormData.customerName}
+              onChange={(e) =>
+                setOrderFormData((prev) => ({
+                  ...prev,
+                  customerName: e.target.value,
+                }))
+              }
             />
           </div>
           <div className="flex flex-col gap-2 md:gap-0">
@@ -117,6 +163,10 @@ export default function OrderForm({
               type="tel"
               placeholder="090x xxx xxx"
               className="w-full h-14 md:h-auto bg-white md:bg-surface-bright border border-outline md:border-outline-variant rounded-lg px-4 md:p-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              value={orderFormData.phone}
+              onChange={(e) =>
+                setOrderFormData((prev) => ({ ...prev, phone: e.target.value }))
+              }
             />
           </div>
         </div>
@@ -134,6 +184,17 @@ export default function OrderForm({
             min={1}
             defaultValue={1}
             className="w-full h-14 md:h-auto bg-white md:bg-surface-bright border border-outline md:border-outline-variant rounded-lg px-4 md:p-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+            value={orderFormData.quantity}
+            onChange={(e) =>
+              setOrderFormData((prev) => ({
+                ...prev,
+                quantity: parseInt(e.target.value) || 1,
+                sumPrice:
+                  (listTypeSauce?.find(
+                    (product) => product.id === Number(selectedProduct),
+                  )?.price || 0) * (parseInt(e.target.value) || 1),
+              }))
+            }
           />
         </div>
 
@@ -149,7 +210,17 @@ export default function OrderForm({
             rows={3}
             placeholder="Số nhà, tên đường, phường/xã..."
             className="w-full bg-white md:bg-surface-bright border border-outline md:border-outline-variant rounded-lg p-4 md:p-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+            value={orderFormData.address}
+            onChange={(e) =>
+              setOrderFormData((prev) => ({ ...prev, address: e.target.value }))
+            }
           />
+        </div>
+        <div className="flex justify-between items-center font-headline-md text-on-surface-variant">
+          <span className="font-bold">Tổng tiền</span>
+          <span className="font-bold text-primary">
+            {orderFormData.sumPrice?.toLocaleString()}₫
+          </span>
         </div>
 
         <button

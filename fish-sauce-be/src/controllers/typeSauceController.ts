@@ -12,7 +12,7 @@ const parseNumber = (value: unknown, fieldName: string): number => {
 
 export const getListTypeSauce = async (
   _req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const typeSauces = await TypeSauce.findAll({
@@ -34,16 +34,29 @@ export const getListTypeSauce = async (
 
 export const createTypeSauce = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
-    const { nameType, price, quantityPerBox, capacity, typeBottleID, status } =
-      req.body;
+    const {
+      nameType,
+      price,
+      quantityPerBox,
+      capacity,
+      typeBottleID,
+      status,
+      description,
+    } = req.body;
 
-    if (!nameType || price === undefined || !capacity || !typeBottleID) {
+    if (
+      !nameType ||
+      price === undefined ||
+      !capacity ||
+      !typeBottleID ||
+      !description
+    ) {
       res.status(400).json({
         message:
-          "Thiếu trường bắt buộc: nameType, price, capacity, typeBottleID",
+          "Thiếu trường bắt buộc: nameType, price, capacity, typeBottleID, description",
       });
       return;
     }
@@ -59,6 +72,7 @@ export const createTypeSauce = async (
       typeBottleID: parseNumber(typeBottleID, "typeBottleID"),
       imageTypeSauce: req.file?.filename ?? null,
       status: status !== undefined ? parseNumber(status, "status") : 1,
+      description: String(description),
     });
 
     res.status(201).json({
@@ -79,7 +93,7 @@ export const createTypeSauce = async (
 
 export const updateTypeSauce = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { id } = req.params;
@@ -93,8 +107,15 @@ export const updateTypeSauce = async (
       return;
     }
 
-    const { nameType, price, quantityPerBox, capacity, typeBottleID, status } =
-      req.body;
+    const {
+      nameType,
+      price,
+      quantityPerBox,
+      capacity,
+      typeBottleID,
+      status,
+      description,
+    } = req.body;
 
     const updateData: Partial<{
       nameType: string;
@@ -104,6 +125,7 @@ export const updateTypeSauce = async (
       typeBottleID: number;
       imageTypeSauce: string | null;
       status: number;
+      description: string;
     }> = {};
 
     if (nameType !== undefined) updateData.nameType = String(nameType);
@@ -121,6 +143,7 @@ export const updateTypeSauce = async (
       updateData.typeBottleID = parseNumber(typeBottleID, "typeBottleID");
     }
     if (status !== undefined) updateData.status = parseNumber(status, "status");
+    if (description !== undefined) updateData.description = String(description);
 
     if (req.file?.filename) {
       deleteImageFile(typeSauce.imageTypeSauce);

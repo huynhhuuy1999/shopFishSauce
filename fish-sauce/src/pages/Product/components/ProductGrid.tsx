@@ -2,7 +2,7 @@ import { PRODUCTS } from "../constants";
 import ProductCard from "./ProductCard";
 
 interface ProductGridProps {
-  onOrder: (productName: string) => void;
+  onOrder: (productId: number) => void;
 }
 
 export default function ProductGrid({ onOrder }: ProductGridProps) {
@@ -11,11 +11,7 @@ export default function ProductGrid({ onOrder }: ProductGridProps) {
       <div className="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-gutter">
           {PRODUCTS.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onOrder={onOrder}
-            />
+            <ProductCard key={product.id} product={product} onOrder={onOrder} />
           ))}
         </div>
       </div>

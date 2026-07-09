@@ -10,11 +10,12 @@ export interface TypeSauceAttributes {
   typeBottleID: number;
   imageTypeSauce: string | null;
   status: number;
+  description: string;
 }
 
 export type TypeSauceCreationAttributes = Optional<
   TypeSauceAttributes,
-  "id" | "quantityPerBox" | "imageTypeSauce" | "status"
+  "id" | "quantityPerBox" | "imageTypeSauce" | "status" | "description"
 >;
 
 class TypeSauce
@@ -29,6 +30,7 @@ class TypeSauce
   declare typeBottleID: number;
   declare imageTypeSauce: string | null;
   declare status: number;
+  declare description: string;
 }
 
 TypeSauce.init(
@@ -66,12 +68,16 @@ TypeSauce.init(
       type: DataTypes.INTEGER,
       defaultValue: 1,
     },
+    description: {
+      type: DataTypes.STRING(200),
+      allowNull: false,
+    },
   },
   {
     sequelize,
     tableName: "TypeSauce",
     timestamps: false,
-  }
+  },
 );
 
 export default TypeSauce;

@@ -1,17 +1,27 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import OrderForm from "./components/OrderForm";
 import ProductCommitments from "./components/ProductCommitments";
 import ProductGrid from "./components/ProductGrid";
 import ProductHero from "./components/ProductHero";
+import { getListTypeSauce } from "@/services/typeSauce.service";
+import type { TypeSauceResponse } from "@/models/typeSauce";
 
 export default function Product() {
   const orderFormRef = useRef<HTMLDivElement>(null);
-  const [selectedProduct, setSelectedProduct] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<number>();
+  const [listTypeSauce, setListTypeSauce] = useState<TypeSauceResponse[]>([]);
 
-  const handleOrderProduct = (productName: string) => {
-    setSelectedProduct(productName);
+  const handleOrderProduct = (productId: number) => {
+    setSelectedProduct(productId);
     orderFormRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    getListTypeSauce().then((res) => {
+      console.log("res.data", res.data);
+      setListTypeSauce(res.data);
+    });
+  }, []);
 
   return (
     <main className="pt-20 pb-xl px-margin-mobile md:px-0 md:pb-0">
@@ -28,6 +38,7 @@ export default function Product() {
               <OrderForm
                 selectedProduct={selectedProduct}
                 onProductChange={setSelectedProduct}
+                listTypeSauce={listTypeSauce}
               />
             </div>
           </div>

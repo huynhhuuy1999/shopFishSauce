@@ -11,7 +11,7 @@ const parseNumber = (value: unknown, fieldName: string): number => {
 
 export const getListHoaDon = async (
   _req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const hoaDons = await HoaDon.findAll({
@@ -33,7 +33,7 @@ export const getListHoaDon = async (
 
 export const createHoaDon = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const {
@@ -46,12 +46,27 @@ export const createHoaDon = async (
       typeSauceId,
     } = req.body;
 
-    if (sumPrice === undefined) {
-      res.status(400).json({ message: "Thiếu trường bắt buộc: sumPrice" });
+    if (
+      sumPrice === undefined ||
+      !customerName ||
+      !phone ||
+      !address ||
+      !quantity
+    ) {
+      res
+        .status(400)
+        .json({
+          message:
+            "Thiếu trường bắt buộc: sumPrice, customerName, phone, address, quantity",
+        });
       return;
     }
 
-    if (typeSauceId !== undefined && typeSauceId !== null && typeSauceId !== "") {
+    if (
+      typeSauceId !== undefined &&
+      typeSauceId !== null &&
+      typeSauceId !== ""
+    ) {
       const typeSauce = await TypeSauce.findByPk(typeSauceId);
       if (!typeSauce) {
         res.status(400).json({ message: "typeSauceId không tồn tại" });
@@ -60,19 +75,13 @@ export const createHoaDon = async (
     }
 
     const hoaDon = await HoaDon.create({
-      customerName: customerName ?? null,
+      customerName: customerName,
       phone: phone ?? null,
       address: address ?? null,
       status: status !== undefined ? parseNumber(status, "status") : null,
       sumPrice: parseNumber(sumPrice, "sumPrice"),
-      quantity:
-        quantity !== undefined && quantity !== ""
-          ? parseNumber(quantity, "quantity")
-          : null,
-      typeSauceId:
-        typeSauceId !== undefined && typeSauceId !== ""
-          ? parseNumber(typeSauceId, "typeSauceId")
-          : null,
+      quantity: parseNumber(quantity, "quantity"),
+      typeSauceId: parseNumber(typeSauceId, "typeSauceId"),
     });
 
     res.status(201).json({
@@ -89,7 +98,7 @@ export const createHoaDon = async (
 
 export const updateHoaDon = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { id } = req.params;
@@ -110,7 +119,11 @@ export const updateHoaDon = async (
       typeSauceId,
     } = req.body;
 
-    if (typeSauceId !== undefined && typeSauceId !== null && typeSauceId !== "") {
+    if (
+      typeSauceId !== undefined &&
+      typeSauceId !== null &&
+      typeSauceId !== ""
+    ) {
       const typeSauce = await TypeSauce.findByPk(typeSauceId);
       if (!typeSauce) {
         res.status(400).json({ message: "typeSauceId không tồn tại" });
@@ -119,39 +132,48 @@ export const updateHoaDon = async (
     }
 
     const updateData: Partial<{
-      customerName: string | null;
-      phone: string | null;
-      address: string | null;
+      customerName: string;
+      phone: string;
+      address: string;
       status: number | null;
       sumPrice: number;
-      quantity: number | null;
-      typeSauceId: number | null;
+      quantity: number;
+      typeSauceId: number;
     }> = {};
 
-    if (customerName !== undefined) {
-      updateData.customerName = customerName ?? null;
-    }
-    if (phone !== undefined) updateData.phone = phone ?? null;
-    if (address !== undefined) updateData.address = address ?? null;
-    if (status !== undefined) {
-      updateData.status =
-        status === null || status === "" ? null : parseNumber(status, "status");
-    }
-    if (sumPrice !== undefined) {
-      updateData.sumPrice = parseNumber(sumPrice, "sumPrice");
-    }
-    if (quantity !== undefined) {
-      updateData.quantity =
-        quantity === null || quantity === ""
-          ? null
-          : parseNumber(quantity, "quantity");
-    }
-    if (typeSauceId !== undefined) {
-      updateData.typeSauceId =
-        typeSauceId === null || typeSauceId === ""
-          ? null
-          : parseNumber(typeSauceId, "typeSauceId");
-    }
+    // if (customerName !== undefined) {
+    //   updateData.customerName = customerName ?? null;
+    // }
+    // if (phone !== undefined) updateData.phone = phone ?? null;
+    // if (address !== undefined) updateData.address = address ?? null;
+    // if (status !== undefined) {
+    //   updateData.status =
+    //     status === null || status === "" ? null : parseNumber(status, "status");
+    // }
+    // if (sumPrice !== undefined) {
+    //   updateData.sumPrice = parseNumber(sumPrice, "sumPrice");
+    // }
+    // if (quantity !== undefined) {
+    //   updateData.quantity =
+    //     quantity === null || quantity === ""
+    //       ? null
+    //       : parseNumber(quantity, "quantity");
+    // }
+    // if (typeSauceId !== undefined) {
+    //   updateData.typeSauceId =
+    //     typeSauceId === null || typeSauceId === ""
+    //       ? null
+    //       : parseNumber(typeSauceId, "typeSauceId");
+    // }
+
+    ((updateData.customerName = customerName),
+      (updateData.phone = phone ?? undefined),
+      (updateData.address = address ?? undefined),
+      (updateData.status =
+        status !== undefined ? parseNumber(status, "status") : undefined),
+      (updateData.sumPrice = parseNumber(sumPrice, "sumPrice")),
+      (updateData.quantity = parseNumber(quantity, "quantity")),
+      (updateData.typeSauceId = parseNumber(typeSauceId, "typeSauceId")));
 
     await hoaDon.update(updateData);
 

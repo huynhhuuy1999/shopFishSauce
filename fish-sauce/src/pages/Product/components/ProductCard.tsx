@@ -15,7 +15,7 @@ const BADGE_STYLES: Record<ProductBadgeVariant, string> = {
 
 interface ProductCardProps {
   product: Product;
-  onOrder: (productName: string) => void;
+  onOrder: (productId: number) => void;
 }
 
 export default function ProductCard({ product, onOrder }: ProductCardProps) {
@@ -66,7 +66,7 @@ export default function ProductCard({ product, onOrder }: ProductCardProps) {
           </span>
           <button
             type="button"
-            onClick={() => onOrder(product.name)}
+            onClick={() => onOrder(product.id)}
             className="w-full md:w-auto bg-primary text-on-primary md:text-on-primary px-md py-4 md:py-sm rounded-lg font-label-md hover:bg-primary/90 transition-colors active:scale-95 flex justify-center items-center gap-2"
           >
             <MaterialIcon name="shopping_basket" className="md:hidden" />
