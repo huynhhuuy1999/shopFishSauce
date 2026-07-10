@@ -53,12 +53,10 @@ export const createHoaDon = async (
       !address ||
       !quantity
     ) {
-      res
-        .status(400)
-        .json({
-          message:
-            "Thiếu trường bắt buộc: sumPrice, customerName, phone, address, quantity",
-        });
+      res.status(400).json({
+        message:
+          "Thiếu trường bắt buộc: sumPrice, customerName, phone, address, quantity",
+      });
       return;
     }
 
@@ -140,31 +138,6 @@ export const updateHoaDon = async (
       quantity: number;
       typeSauceId: number;
     }> = {};
-
-    // if (customerName !== undefined) {
-    //   updateData.customerName = customerName ?? null;
-    // }
-    // if (phone !== undefined) updateData.phone = phone ?? null;
-    // if (address !== undefined) updateData.address = address ?? null;
-    // if (status !== undefined) {
-    //   updateData.status =
-    //     status === null || status === "" ? null : parseNumber(status, "status");
-    // }
-    // if (sumPrice !== undefined) {
-    //   updateData.sumPrice = parseNumber(sumPrice, "sumPrice");
-    // }
-    // if (quantity !== undefined) {
-    //   updateData.quantity =
-    //     quantity === null || quantity === ""
-    //       ? null
-    //       : parseNumber(quantity, "quantity");
-    // }
-    // if (typeSauceId !== undefined) {
-    //   updateData.typeSauceId =
-    //     typeSauceId === null || typeSauceId === ""
-    //       ? null
-    //       : parseNumber(typeSauceId, "typeSauceId");
-    // }
 
     ((updateData.customerName = customerName),
       (updateData.phone = phone ?? undefined),

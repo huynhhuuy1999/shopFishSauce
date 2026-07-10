@@ -5,6 +5,7 @@ import "./index.css";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
+import { Test } from "./pages/test";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
@@ -13,6 +14,7 @@ createRoot(document.getElementById("root")!).render(
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/test" element={<Test />} />
         </Route>
       </Routes>
     </StrictMode>

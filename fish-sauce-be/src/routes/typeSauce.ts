@@ -10,6 +10,7 @@ const router = Router();
 
 const handleUpload = (req: Request, res: Response, next: NextFunction) => {
   uploadTypeSauceImage(req, res, (err) => {
+    console.log("Upload middleware error:", err);
     if (err) {
       res.status(400).json({ message: err.message });
       return;

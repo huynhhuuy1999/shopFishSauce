@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { TypeBottle, TypeSauce } from "../models";
 import { deleteImageFile } from "../utils/image";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const parseNumber = (value: unknown, fieldName: string): number => {
   const num = Number(value);
@@ -20,9 +23,17 @@ export const getListTypeSauce = async (
       order: [["id", "DESC"]],
     });
 
+    const newList = typeSauces.map((typeSauce) => ({
+      ...typeSauce.toJSON(),
+      imageTypeSauce:
+        process.env.BASE_URL +
+        "/uploads/type-sauces/" +
+        typeSauce.imageTypeSauce,
+    }));
+
     res.json({
       message: "Lấy danh sách TypeSauce thành công",
-      data: typeSauces,
+      data: newList,
     });
   } catch (error) {
     res.status(500).json({
@@ -60,7 +71,7 @@ export const createTypeSauce = async (
       });
       return;
     }
-
+    // console.log("request", req);
     const typeSauce = await TypeSauce.create({
       nameType: String(nameType),
       price: parseNumber(price, "price"),

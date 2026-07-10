@@ -4,6 +4,7 @@ import {
   type Product,
   type ProductBadgeVariant,
 } from "../constants";
+import type { TypeSauceResponse } from "@/models/typeSauce";
 
 const BADGE_STYLES: Record<ProductBadgeVariant, string> = {
   premium:
@@ -14,7 +15,7 @@ const BADGE_STYLES: Record<ProductBadgeVariant, string> = {
 };
 
 interface ProductCardProps {
-  product: Product;
+  product: TypeSauceResponse;
   onOrder: (productId: number) => void;
 }
 
@@ -23,21 +24,21 @@ export default function ProductCard({ product, onOrder }: ProductCardProps) {
     <article className="product-card bg-surface-container-lowest border border-outline-variant/30 rounded-lg flex flex-col h-full overflow-hidden shadow-sm md:shadow-none md:p-md">
       <div className="relative mb-0 md:mb-md rounded-none md:rounded-lg overflow-hidden h-64 md:h-auto md:aspect-square bg-surface-container-low">
         <img
-          alt={product.imageAlt}
+          alt={product.nameType}
           className="w-full h-full object-cover"
-          src={product.image}
+          src={product?.imageTypeSauce || "/images/default-product.png"}
         />
-        <span
+        {/* <span
           className={`absolute top-3 md:top-sm left-3 md:left-sm px-3 md:px-sm py-1 md:py-xs rounded-full font-label-sm text-label-sm ${BADGE_STYLES[product.badge.variant]}`}
         >
           {product.badge.label}
-        </span>
+        </span> */}
       </div>
 
       <div className="p-4 md:p-0 flex flex-col flex-grow gap-2 md:gap-0">
         <div className="flex justify-between items-start md:block">
           <h3 className="font-headline text-headline-md text-on-surface mb-0 md:mb-xs">
-            {product.name}
+            {product.nameType}
           </h3>
           <span className="font-headline text-headline-md text-primary md:hidden shrink-0 ml-2">
             {formatPrice(product.price, true)}
@@ -45,11 +46,11 @@ export default function ProductCard({ product, onOrder }: ProductCardProps) {
         </div>
 
         <p className="text-on-surface-variant font-body-md text-body-md mb-0 md:mb-md flex-grow line-clamp-2 md:line-clamp-none">
-          <span className="md:hidden">{product.descriptionMobile}</span>
+          <span className="md:hidden">{product.description}</span>
           <span className="hidden md:inline">{product.description}</span>
         </p>
 
-        <div className="flex flex-wrap gap-2 mt-2 md:hidden">
+        {/* <div className="flex flex-wrap gap-2 mt-2 md:hidden">
           {product.tags.map((tag) => (
             <span
               key={tag}
@@ -58,7 +59,7 @@ export default function ProductCard({ product, onOrder }: ProductCardProps) {
               {tag}
             </span>
           ))}
-        </div>
+        </div> */}
 
         <div className="flex justify-between items-center mt-auto pt-4 md:pt-0">
           <span className="hidden md:inline font-headline text-headline-md text-primary">

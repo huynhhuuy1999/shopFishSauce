@@ -18,7 +18,6 @@ export default function Product() {
 
   useEffect(() => {
     getListTypeSauce().then((res) => {
-      console.log("res.data", res.data);
       setListTypeSauce(res.data);
     });
   }, []);
@@ -26,7 +25,7 @@ export default function Product() {
   return (
     <main className="pt-20 pb-xl px-margin-mobile md:px-0 md:pb-0">
       <ProductHero />
-      <ProductGrid onOrder={handleOrderProduct} />
+      <ProductGrid onOrder={handleOrderProduct} listTypeSauce={listTypeSauce} />
 
       <section className="mt-xl md:mt-0 py-0 md:py-xl md:bg-surface-container-low">
         <div className="max-w-[1280px] mx-auto md:px-margin-desktop">

@@ -9,7 +9,10 @@ export const getTypeSauceById = (id: number) => {
   return api.get(`/type-sauce/${id}`);
 };
 
-export const createTypeSauce = (data: TypeSauceRequest) => {
+// export const createTypeSauce = (data: TypeSauceRequest) => {
+//   return api.post("/type-sauce", data);
+// };
+export const createTypeSauce = (data: FormData) => {
   return api.post("/type-sauce", data);
 };
 
