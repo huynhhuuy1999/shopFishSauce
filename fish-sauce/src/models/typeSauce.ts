@@ -8,6 +8,12 @@ export interface TypeSauceResponse {
   imageTypeSauce: string | null;
   status: number;
   description: string;
+  typeBottle?: TypeBottle;
+}
+
+export interface TypeBottle {
+  id: number;
+  nameTypeBottle: string;
 }
 
 export interface TypeSauceRequest {

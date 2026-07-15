@@ -71,7 +71,13 @@ export const createTypeSauce = async (
       });
       return;
     }
-    // console.log("request", req);
+
+    // if (req.file) {
+    //   const imageName = await normalizeImage(req.file.path);
+
+    //   req.file.filename = imageName;
+    // }
+
     const typeSauce = await TypeSauce.create({
       nameType: String(nameType),
       price: parseNumber(price, "price"),

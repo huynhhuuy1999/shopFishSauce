@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { HoaDon, TypeSauce } from "../models";
+import { HoaDon, TypeBottle, TypeSauce } from "../models";
+import { Resend } from "resend";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const parseNumber = (value: unknown, fieldName: string): number => {
   const num = Number(value);
@@ -81,6 +85,28 @@ export const createHoaDon = async (
       quantity: parseNumber(quantity, "quantity"),
       typeSauceId: parseNumber(typeSauceId, "typeSauceId"),
     });
+
+    const typeSauce: any = await TypeSauce.findByPk(typeSauceId, {
+      include: [{ model: TypeBottle, as: "typeBottle" }],
+    });
+
+    const resend = new Resend(process.env.RESEND_KEY);
+    const { data, error } = await resend.emails.send({
+      from: "Song Nguyễn <onboarding@resend.dev>",
+      to: ["huynhhuuy1@gmail.com"],
+      subject: "Đơn hàng mới từ khách hàng",
+      html: `<h1>Đơn hàng mới từ khách hàng</h1>
+    <p>Tên khách hàng: ${customerName}</p>
+    <p>Số điện thoại: ${phone}</p>
+    <p>Địa chỉ: ${address}</p>
+    <p>Tổng giá: ${sumPrice}</p>
+    <p>Số lượng: ${quantity}</p>
+    <p>loại nước mắm: ${typeSauce?.dataValues.nameType} ${typeSauce?.dataValues.quantityPerBox && typeSauce?.dataValues.quantityPerBox > 1 ? `Thùng ${typeSauce.quantityPerBox} ${typeSauce?.dataValues?.typeBottle?.nameTypeBottle}, ${typeSauce.dataValues.capacity}ml/chai` : ""}</p>`,
+    });
+
+    if (error) {
+      res.status(400).json({ error });
+    }
 
     res.status(201).json({
       message: "Tạo hóa đơn thành công",

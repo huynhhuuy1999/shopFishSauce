@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import MaterialIcon from "@/components/MaterialIcon";
 // import { PRODUCTS } from "../constants";
-import { createHoaDon } from "@/services/order.service";
 import type { TypeSauceResponse } from "@/models/typeSauce";
 
 type SubmitState = "idle" | "loading" | "success";
 
 interface OrderFormProps {
   selectedProduct?: number;
-  onProductChange: (product: number) => void;
   listTypeSauce?: TypeSauceResponse[];
+  orderFormData: IOrderForm;
+  setOrderFormData: (data: IOrderForm) => void;
+  onSubmit?: () => void;
 }
 
 interface IOrderForm {
@@ -24,19 +25,13 @@ interface IOrderForm {
 
 export default function OrderForm({
   selectedProduct,
-  onProductChange,
   listTypeSauce,
+  orderFormData,
+  setOrderFormData,
+  onSubmit,
 }: OrderFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
-  const [orderFormData, setOrderFormData] = useState<IOrderForm>({
-    customerName: "",
-    phone: "",
-    address: "",
-    status: 1,
-    sumPrice: 0,
-    quantity: 1,
-  });
 
   useEffect(() => {
     if (selectedProduct) {
@@ -54,11 +49,10 @@ export default function OrderForm({
     setSubmitState("loading");
     setTimeout(async () => {
       setSubmitState("success");
-      await createHoaDon(orderFormData);
+      onSubmit?.();
       setTimeout(() => {
         setSubmitState("idle");
         formRef.current?.reset();
-        // onProductChange(0);
       }, 3000);
     }, 1500);
   };
@@ -95,18 +89,16 @@ export default function OrderForm({
           <div className="relative">
             <select
               id="product-select"
-              value={selectedProduct}
+              value={orderFormData.typeSauceId || ""}
               onChange={(event) => {
-                onProductChange(Number(event.target.value));
-                setOrderFormData((prev) => ({
-                  ...prev,
+                setOrderFormData({
+                  ...orderFormData,
                   typeSauceId: Number(event.target.value),
                   sumPrice:
-                    listTypeSauce?.find(
+                    (listTypeSauce?.find(
                       (product) => product.id === Number(event.target.value),
-                    )?.price || 0 * prev.quantity,
-                }));
-                console.log("selectedProduct", event.target.value);
+                    )?.price || 0) * orderFormData.quantity,
+                });
               }}
               className="w-full h-14 md:h-auto bg-white md:bg-surface-bright border border-outline md:border-outline-variant rounded-lg px-4 md:p-md font-body-md appearance-none focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
             >
@@ -144,10 +136,10 @@ export default function OrderForm({
               className="w-full h-14 md:h-auto bg-white md:bg-surface-bright border border-outline md:border-outline-variant rounded-lg px-4 md:p-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
               value={orderFormData.customerName}
               onChange={(e) =>
-                setOrderFormData((prev) => ({
-                  ...prev,
+                setOrderFormData({
+                  ...orderFormData,
                   customerName: e.target.value,
-                }))
+                })
               }
             />
           </div>
@@ -165,7 +157,7 @@ export default function OrderForm({
               className="w-full h-14 md:h-auto bg-white md:bg-surface-bright border border-outline md:border-outline-variant rounded-lg px-4 md:p-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
               value={orderFormData.phone}
               onChange={(e) =>
-                setOrderFormData((prev) => ({ ...prev, phone: e.target.value }))
+                setOrderFormData({ ...orderFormData, phone: e.target.value })
               }
             />
           </div>
@@ -186,14 +178,15 @@ export default function OrderForm({
             className="w-full h-14 md:h-auto bg-white md:bg-surface-bright border border-outline md:border-outline-variant rounded-lg px-4 md:p-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
             value={orderFormData.quantity}
             onChange={(e) =>
-              setOrderFormData((prev) => ({
-                ...prev,
+              setOrderFormData({
+                ...orderFormData,
                 quantity: parseInt(e.target.value) || 1,
                 sumPrice:
                   (listTypeSauce?.find(
-                    (product) => product.id === Number(selectedProduct),
+                    (product) =>
+                      product.id === Number(orderFormData.typeSauceId),
                   )?.price || 0) * (parseInt(e.target.value) || 1),
-              }))
+              })
             }
           />
         </div>
@@ -212,7 +205,7 @@ export default function OrderForm({
             className="w-full bg-white md:bg-surface-bright border border-outline md:border-outline-variant rounded-lg p-4 md:p-md font-body-md focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
             value={orderFormData.address}
             onChange={(e) =>
-              setOrderFormData((prev) => ({ ...prev, address: e.target.value }))
+              setOrderFormData({ ...orderFormData, address: e.target.value })
             }
           />
         </div>

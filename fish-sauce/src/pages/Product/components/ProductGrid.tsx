@@ -11,7 +11,6 @@ export default function ProductGrid({
   onOrder,
   listTypeSauce,
 }: ProductGridProps) {
-  console.log(listTypeSauce);
   return (
     <section className="py-0 md:py-xl bg-surface">
       <div className="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop">

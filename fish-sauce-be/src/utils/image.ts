@@ -24,3 +24,21 @@ export const deleteImageFile = (fileName: string | null | undefined): void => {
     fs.unlinkSync(filePath);
   }
 };
+
+// export async function normalizeImage(filePath: string) {
+//   const outputPath = filePath.replace(/\.(jpg|jpeg|png|gif)$/i, ".webp");
+
+//   await sharp(filePath)
+//     .resize(1200, 1500, {
+//       fit: "contain",
+//       background: "#ffffff",
+//     })
+//     .webp({
+//       quality: 85,
+//     })
+//     .toFile(outputPath);
+
+//   await fsPromises.unlink(filePath);
+
+//   return path.basename(outputPath);
+// }

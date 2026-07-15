@@ -11,7 +11,6 @@ ensureUploadDir();
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    console.log("storage");
     ensureUploadDir();
     cb(null, TYPE_SAUCE_DIR);
   },
